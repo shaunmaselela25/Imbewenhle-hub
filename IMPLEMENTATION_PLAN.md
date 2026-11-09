@@ -527,7 +527,7 @@ Allowed transitions (BR8). Anything else is rejected with `status.invalidTransit
 | Name | Runs when | What it does | BR# | Test |
 | --- | --- | --- | --- | --- |
 | `generate_public_reference()` | default on enquiries insert | `IMB-` + 10 Crockford base32 chars from `gen_random_bytes` (50 bits); retries on unique clash | BR1 | T-BR1-1, T-BR1-2 |
-| `handle_new_user` | after insert on auth.users | Creates `profiles` row (role `client`); sets `requester_id` on enquiries with matching confirmed email and null requester | BR4 | T-DB-1, T-DB-2 |
+| `handle_new_user` | after insert, or update of `email_confirmed_at`, on auth.users (a magic-link user is created unconfirmed and confirmed later) | Creates `profiles` row (role `client`); sets `requester_id` on enquiries with matching confirmed email and null requester | BR4 | T-DB-1, T-DB-2 |
 | `link_enquiries_on_submit` | inside `submit_enquiry` | Sets `requester_id` to `auth.uid()` when signed in | BR4 | T-DB-3 |
 | `set_updated_at` | before update on enquiries, proposals, milestones | Sets `updated_at = now()` | — | T-DB-4 |
 | `enforce_enquiry_status_transition` | before update of status on enquiries | Rejects transitions not in 8.3; rejects non-staff | BR6, BR8 | T-BR8-1 … T-BR8-4 |
@@ -928,27 +928,27 @@ The same ID may be used at two levels when both prove the same criterion, e.g. T
 | T-SEC-1a … T-SEC-19b | Database | supabase/tests/10_permissions.test.sql | One allow and one deny test per row in Section 9 (SEC1–SEC19), run as anon, Naledi (client A), Pieter (client B), Sipho (consultant) and Thandi (admin) via `set local role` + JWT claims |
 | T-EDGE-9 | Database | supabase/tests/07_profiles.test.sql | Given one admin, when their role is changed to consultant, then it fails with `last_admin` |
 
-- [ ] All tests above are written, run, and fail for the expected reason.
+- [x] All tests above are written, run, and fail for the expected reason.
 
 **Step 2: Backend (Green)**
 
-- [ ] Migrations 2–11 from Section 8.6, in order.
-- [ ] `submit_enquiry(p jsonb)` `security definer`: steps in Section 10.2; raises `invalid_input`, `category_unavailable`, `rate_limited`.
-- [ ] `change_enquiry_status(p_reference text, p_to text)` `security definer`: checks `is_staff()`; raises `invalid_transition`, `needs_accepted_proposal`, `forbidden`.
-- [ ] `set_user_role(p_user uuid, p_role text)` `security definer`: checks `is_admin()`; raises `last_admin`, `forbidden`.
-- [ ] `client_enquiry_view` (`security_invoker = true`) exposing only client-safe columns.
-- [ ] Revoke direct `insert` on `enquiries` and `audit_events` from `anon` and `authenticated`; grant `execute` on the three functions.
-- [ ] `supabase/seed.sql` per Section 8.7.
-- [ ] `npm run db:types` and commit `lib/supabase/database.types.ts`.
+- [x] Migrations 2–11 from Section 8.6, in order.
+- [x] `submit_enquiry(p jsonb)` `security definer`: steps in Section 10.2; raises `invalid_input`, `category_unavailable`, `rate_limited`.
+- [x] `change_enquiry_status(p_reference text, p_to text)` `security definer`: checks `is_staff()`; raises `invalid_transition`, `needs_accepted_proposal`, `forbidden`.
+- [x] `set_user_role(p_user uuid, p_role text)` `security definer`: checks `is_admin()`; raises `last_admin`, `forbidden`.
+- [x] `client_enquiry_view` (`security_invoker = true`) exposing only client-safe columns.
+- [x] Revoke direct `insert` on `enquiries` and `audit_events` from `anon` and `authenticated`; grant `execute` on the three functions.
+- [x] `supabase/seed.sql` per Section 8.7.
+- [x] `npm run db:types` and commit `lib/supabase/database.types.ts`.
 
 **Step 3: Frontend (Green)**
 
-- [ ] None in this phase.
+- [x] None in this phase.
 
 **Step 4: Refactor and full check**
 
-- [ ] Code cleaned up; no duplicated logic; names use PRD key terms.
-- [ ] Full check passes (lint, type check, every automated test from every phase so far).
+- [x] Code cleaned up; no duplicated logic; names use PRD key terms.
+- [x] Full check passes (lint, type check, every automated test from every phase so far).
 
 **Step 5: Manual checks (human)**
 
@@ -957,11 +957,11 @@ The same ID may be used at two levels when both prove the same criterion, e.g. T
 
 **Definition of Done**
 
-- [ ] Every test in Step 1 passes.
-- [ ] All earlier tests still pass.
-- [ ] Every screen in this phase shows all its required states (none in this phase).
+- [x] Every test in Step 1 passes.
+- [x] All earlier tests still pass.
+- [x] Every screen in this phase shows all its required states (none in this phase).
 - [ ] Manual checks are ticked by the human.
-- [ ] Progress log updated (Section 17).
+- [x] Progress log updated (Section 17).
 
 **Commit message:** `Phase 2: Data and security`
 
@@ -1599,6 +1599,7 @@ Edge cases and quality:
 | Phase | Date | Status | Automated tests (passed / total) | Commit | Notes |
 | --- | --- | --- | --- | --- | --- |
 | 1 | 09 Nov 2026 | Automated checks pass; human manual checks and S1 design comparison pending | 36 / 36 (33 unit and component, 1 database, 1 integration, 1 E2E) | `Phase 1: Foundation` | https://github.com/shaunmaselela25/Imbewenhle-hub. Lint, type check and `npm run scan:secrets` clean. Node 26.13.0, npm 11.20.0, Next.js 16.4.5, React 19.3.0, TypeScript 5.9.3, Tailwind 4.3.5, Zod 4.6.7, @supabase/supabase-js 2.119.0, @supabase/ssr 0.12.7, Supabase CLI 3.0.0, Vitest 5.1.0, RTL 16.3.3, @testing-library/dom 10.4.2, jest-dom 7.0.1, user-event 14.6.8, jsdom 31.0.0, coverage-v8 5.1.0, Playwright 1.65.0, axe 4.14.0, @lhci/cli 0.16.0, gitleaks 8.30.1. `@types/node` raised from the scaffold's ^20 to ^26 (Vitest requires ≥22). S1 has no design yet (#30), and rows 30–39 of Section 18 hold unreviewed assumptions |
+| 2 | 09 Nov 2026 | Automated checks pass; human manual checks pending | 217 / 217 (33 unit and component, 182 database, 1 integration, 1 E2E) | `Phase 2: Data and security` | Lint, type check and `npm run scan:secrets` clean. Every SEC1–SEC19 row has an allow and a deny test. Seed service descriptions are placeholders until Section 18 #24 is supplied. Additions the plan left open: error codes `milestone_locked` and `not_found`; helpers `changed_fields`, `audit_row_change` (shared by `audit_proposal`, `audit_milestone`, `audit_category`) and `category_title` (keeps an inactive category's title on a client's enquiry) |
 
 ---
 
