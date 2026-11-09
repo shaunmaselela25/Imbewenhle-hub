@@ -5,17 +5,33 @@ export const messages = {
   "skip.link": "Skip to content",
   "page.loading": "Loading…",
 
-  "landing.valueProposition": "Describe your technology needs and follow your enquiry through to delivery.",
-  "landing.summary": "Submit a service enquiry, follow its status and view agreed project information in one place.",
-  "landing.services.heading": "Services",
-  "landing.process.heading": "How it works",
-  "landing.process.enquire": "Submit a service enquiry",
-  "landing.process.review": "A consultant reviews your enquiry and clarifies requirements",
-  "landing.process.propose": "Review your proposal",
-  "landing.process.deliver": "Follow milestones through delivery",
-  "landing.enquiryAction": "Start an enquiry",
+  "landing.eyebrow": "INSTITUTIONAL PRACTICE • ARCHITECTURE GOVERNANCE",
+  "landing.valueProposition": "Enterprise Technology Consulting & Solutions",
+  "landing.summary":
+    "Guiding modern enterprises through digital evolution, architecture modernization, and operational excellence.",
+  "landing.enquiryAction": "Submit Service Enquiry",
+  "landing.protocolAction": "Review Engagement Protocol",
+  "landing.services.eyebrow": "PILLARS OF PRACTICE",
+  "landing.services.heading": "Service Catalogue",
+  "landing.process.eyebrow": "DELIVERY PROTOCOL",
+  "landing.process.heading": "3-Step Engagement Lifecycle",
+  "landing.process.intro":
+    "Structured, milestone-backed delivery guarantees zero contractual ambiguity.",
+  "landing.process.stage": "STAGE {number}",
+  "landing.process.step1.title": "Intake & Requirements Triage",
+  "landing.process.step1.body":
+    "Initial structural discovery, security boundary mapping, and direct alignment on corporate business drivers.",
+  "landing.process.step2.title": "Technical Proposal & Terms",
+  "landing.process.step2.body":
+    "Comprehensive architectural blueprint, concrete commercial parameters, and mutual non-disclosure execution.",
+  "landing.process.step2.detail": "Deliverable: Architecture Scope Document",
+  "landing.process.step3.title": "Phased Milestone Delivery",
+  "landing.process.step3.body":
+    "Agile execution sprints, verifiable audit sign-offs, and dedicated Level-3 engineer oversight.",
+  "landing.process.step3.detail": "Outcome: Audited Enterprise Release",
 
-  "catalogue.enquire": "Enquire",
+  "catalogue.enquire": "Select for Enquiry",
+  "catalogue.practice": "PRACTICE #{number}",
   "catalogue.empty": "No services are available right now.",
 
   "form.required": "*",

@@ -13,9 +13,9 @@ export function ServicesSection({ result }: { result: CategoriesResult }) {
 
   return (
     <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {result.categories.map((category) => (
+      {result.categories.map((category, index) => (
         <li key={category.slug}>
-          <ServiceCard {...category} />
+          <ServiceCard {...category} position={index + 1} />
         </li>
       ))}
     </ul>
