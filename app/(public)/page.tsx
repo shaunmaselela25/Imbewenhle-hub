@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { buttonClasses } from "@/components/Button";
 import { PageState } from "@/components/PageState";
 import { CatalogueServices } from "@/features/catalogue/CatalogueServices";
+import { CategoryNotice } from "@/features/catalogue/CategoryNotice";
 import { formatMessage, messages, type MessageKey } from "@/lib/copy/messages";
 
 type Stage = { title: MessageKey; body: MessageKey; detail?: MessageKey };
@@ -22,9 +23,18 @@ const stages: Stage[] = [
 
 const eyebrowClasses = "text-xs font-semibold text-primary-hover";
 
-export default function LandingPage() {
+type LandingPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default function LandingPage({ searchParams }: LandingPageProps) {
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-9 px-4 py-9">
+      {searchParams && (
+        <Suspense>
+          <CategoryNotice searchParams={searchParams} />
+        </Suspense>
+      )}
       <section className="flex flex-col gap-4">
         <p className={eyebrowClasses}>{messages["landing.eyebrow"]}</p>
         <h1 className="text-2xl md:text-3xl">{messages["landing.valueProposition"]}</h1>
