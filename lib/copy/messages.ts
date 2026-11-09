@@ -15,12 +15,8 @@ export const messages = {
   "landing.process.deliver": "Follow milestones through delivery",
   "landing.enquiryAction": "Start an enquiry",
 
-  "service.title.digital-it-advisory": "Digital & IT Advisory",
-  "service.title.automation": "Automation",
-  "service.title.systems-integration": "Systems Integration",
-  "service.title.migration": "Migration",
-  "service.title.systems-software-development": "Systems & Software Development",
-  "service.title.technical-solutions-support": "Technical Solutions & Support",
+  "catalogue.enquire": "Enquire",
+  "catalogue.empty": "No services are available right now.",
 
   "form.required": "*",
   "form.counter": "{count} of {max} characters",

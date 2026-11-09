@@ -1,14 +1,8 @@
+import { Suspense } from "react";
 import { buttonClasses } from "@/components/Button";
+import { PageState } from "@/components/PageState";
+import { CatalogueServices } from "@/features/catalogue/CatalogueServices";
 import { messages, type MessageKey } from "@/lib/copy/messages";
-
-const placeholderServices: MessageKey[] = [
-  "service.title.digital-it-advisory",
-  "service.title.automation",
-  "service.title.systems-integration",
-  "service.title.migration",
-  "service.title.systems-software-development",
-  "service.title.technical-solutions-support",
-];
 
 const processSteps: MessageKey[] = [
   "landing.process.enquire",
@@ -27,13 +21,9 @@ export default function LandingPage() {
 
       <section id="services" className="flex flex-col gap-5">
         <h2 className="text-xl">{messages["landing.services.heading"]}</h2>
-        <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {placeholderServices.map((key) => (
-            <li key={key} className="rounded-lg bg-surface p-5 font-semibold">
-              {messages[key]}
-            </li>
-          ))}
-        </ul>
+        <Suspense fallback={<PageState state="loading" />}>
+          <CatalogueServices />
+        </Suspense>
       </section>
 
       <section className="flex flex-col gap-5">

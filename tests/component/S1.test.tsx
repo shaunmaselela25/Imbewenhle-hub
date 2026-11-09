@@ -1,7 +1,24 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import LandingPage from "@/app/(public)/page";
 import { messages } from "@/lib/copy/messages";
+
+vi.mock("@/features/catalogue/CatalogueServices", () => ({
+  CatalogueServices: () => (
+    <ul>
+      {[
+        "Digital & IT Advisory",
+        "Automation",
+        "Systems Integration",
+        "Migration",
+        "Systems & Software Development",
+        "Technical Solutions & Support",
+      ].map((title) => (
+        <li key={title}>{title}</li>
+      ))}
+    </ul>
+  ),
+}));
 
 describe("S1 landing (static)", () => {
   it("T-S1-1 shows value proposition, services, process and enquiry action in order", () => {

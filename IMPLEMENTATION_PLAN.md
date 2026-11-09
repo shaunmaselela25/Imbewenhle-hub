@@ -987,21 +987,21 @@ The same ID may be used at two levels when both prove the same criterion, e.g. T
 | T-INT-1 | Integration | tests/integration/catalogue.test.ts | Given anon, when OP1 runs, then 6 active categories return; an inactive one is excluded |
 | T-E2E-0 | E2E | tests/e2e/catalogue.spec.ts | Given the app, when a visitor opens `/` and selects "Migration", then they arrive at `/enquire/migration` |
 
-- [ ] All tests above are written, run, and fail for the expected reason.
+- [x] All tests above are written, run, and fail for the expected reason.
 
 **Step 2: Backend (Green)**
 
-- [ ] `features/catalogue/getCategories.ts` (server): OP1 with Supabase server client.
+- [x] `features/catalogue/getCategories.ts` (server): OP1 with Supabase server client.
 
 **Step 3: Frontend (Green)**
 
-- [ ] ServiceCard component.
+- [x] ServiceCard component.
 - [ ] S1 services section built to design with states Normal, Loading, Error, Empty.
 
 **Step 4: Refactor and full check**
 
-- [ ] Code cleaned up; no duplicated logic; names use PRD key terms.
-- [ ] Full check passes (lint, type check, every automated test from every phase so far).
+- [x] Code cleaned up; no duplicated logic; names use PRD key terms.
+- [x] Full check passes (lint, type check, every automated test from every phase so far).
 
 **Step 5: Manual checks (human)**
 
@@ -1010,11 +1010,11 @@ The same ID may be used at two levels when both prove the same criterion, e.g. T
 
 **Definition of Done**
 
-- [ ] Every test in Step 1 passes.
-- [ ] All earlier tests still pass.
-- [ ] Every screen in this phase shows all its required states.
+- [x] Every test in Step 1 passes.
+- [x] All earlier tests still pass.
+- [x] Every screen in this phase shows all its required states.
 - [ ] Manual checks are ticked by the human.
-- [ ] Progress log updated (Section 17).
+- [x] Progress log updated (Section 17).
 
 **Commit message:** `Phase 3: Service catalogue`
 
@@ -1600,6 +1600,7 @@ Edge cases and quality:
 | --- | --- | --- | --- | --- | --- |
 | 1 | 09 Nov 2026 | Automated checks pass; human manual checks and S1 design comparison pending | 36 / 36 (33 unit and component, 1 database, 1 integration, 1 E2E) | `Phase 1: Foundation` | https://github.com/shaunmaselela25/Imbewenhle-hub. Lint, type check and `npm run scan:secrets` clean. Node 26.13.0, npm 11.20.0, Next.js 16.4.5, React 19.3.0, TypeScript 5.9.3, Tailwind 4.3.5, Zod 4.6.7, @supabase/supabase-js 2.119.0, @supabase/ssr 0.12.7, Supabase CLI 3.0.0, Vitest 5.1.0, RTL 16.3.3, @testing-library/dom 10.4.2, jest-dom 7.0.1, user-event 14.6.8, jsdom 31.0.0, coverage-v8 5.1.0, Playwright 1.65.0, axe 4.14.0, @lhci/cli 0.16.0, gitleaks 8.30.1. `@types/node` raised from the scaffold's ^20 to ^26 (Vitest requires ≥22). S1 has no design yet (#30), and rows 30–39 of Section 18 hold unreviewed assumptions |
 | 2 | 09 Nov 2026 | Automated checks pass; human manual checks pending | 217 / 217 (33 unit and component, 182 database, 1 integration, 1 E2E) | `Phase 2: Data and security` | Lint, type check and `npm run scan:secrets` clean. Every SEC1–SEC19 row has an allow and a deny test. Seed service descriptions are placeholders until Section 18 #24 is supplied. Additions the plan left open: error codes `milestone_locked` and `not_found`; helpers `changed_fields`, `audit_row_change` (shared by `audit_proposal`, `audit_milestone`, `audit_category`) and `category_title` (keeps an inactive category's title on a client's enquiry) |
+| 3 | 09 Nov 2026 | Automated checks pass; human manual checks and S1 design comparison pending | 225 / 225 (38 unit and component, 182 database, 3 integration, 2 E2E) | `Phase 3: Service catalogue` | Lint, type check, production build and `npm run scan:secrets` clean. Service cards show placeholder descriptions until Section 18 #24 is supplied. `lib/supabase/server.ts` was created here rather than in Phase 5 because OP1 needs it. Added a `CatalogueServices` mock to T-S1-1 so that it needs no network; its assertions are unchanged |
 
 ---
 
@@ -1649,6 +1650,7 @@ All rows are answered with a recommended decision. The human confirms each one a
 | 38 | No approved wording for the required-field marker (7.2, T-C-2) or the character counter (7.2, T-C-3), and Rule 9 forbids inventing wording | 7.2, 10.1, T-C-2, T-C-3 | Recommended: add `form.required` = (required) and `form.counter` = {count} of {max} characters, unless the S2 design shows different text | Assumed: `form.required` = * (as in the Stitch screen); `form.counter` as recommended, because the design's "148 chars (Valid)" does not show the maximum; human to confirm |
 | 39 | Section 5, 9 (SEC20) and Phase 5 name `middleware.ts`, but Next.js 16 (latest stable: 16.4.5) deprecates the `middleware` file convention in favour of `proxy` | 4.1, 5, SEC20, Phase 5 | Recommended: use `proxy.ts` with the same role, and update Section 5, SEC20 and Phase 5 to match | Assumed: recommended answer used without review ("just build", 09 Nov 2026); human to confirm |
 | 40 | The one Stitch screen supplied (mobile enquiry form) conflicts with the PRD and plan: 3-step flow; bottom tab bar (Catalogue, Enquiry, Tracker, Workspace) vs no tabs in 7.3; inline "Confirmation Dialog (POP-01)" (#14 says ask before building modals); several services selectable vs one category; extra fields (telephone, implementation target) and Save Draft; problem minimum 50 vs 30 characters; budget bands differ from #8; reference `IMB-2025-0842` vs BR1 random format; "Domain Verified" email badge vs BR3 | 7.3, 8.1, 10.1, S2, S3, BR1, BR2, BR12 | Waiting on human before Phase 4: PRD and plan win, or change them to match the design. Recommended: PRD and plan win | Open |
+| 41 | No approved wording for the Enquire action key or the S1 empty state (T-US1-1, T-S1-2, 10.1) | 10.1, S1 | `catalogue.enquire` = Enquire (from T-US1-1); `catalogue.empty` = No services are available right now. | Assumed: `catalogue.empty` is provisional wording ("just build", 09 Nov 2026); human to confirm |
 
 ---
 
