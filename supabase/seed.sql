@@ -1,13 +1,13 @@
--- Test data only (Section 8.7). Service descriptions are placeholders until Imbewenhle
--- supplies the approved text (Section 18 #24).
+-- Test data only (Section 8.7). Service descriptions come from the S1 Stitch design
+-- (Section 18 #24).
 
 insert into public.service_categories (slug, title, description, sort_order) values
-  ('digital-it-advisory', 'Digital & IT Advisory', 'Description to be supplied by Imbewenhle.', 1),
-  ('automation', 'Automation', 'Description to be supplied by Imbewenhle.', 2),
-  ('systems-integration', 'Systems Integration', 'Description to be supplied by Imbewenhle.', 3),
-  ('migration', 'Migration', 'Description to be supplied by Imbewenhle.', 4),
-  ('systems-software-development', 'Systems & Software Development', 'Description to be supplied by Imbewenhle.', 5),
-  ('technical-solutions-support', 'Technical Solutions & Support', 'Description to be supplied by Imbewenhle.', 6);
+  ('digital-it-advisory', 'Digital & IT Advisory', 'Strategic tech roadmap, enterprise architecture review, governance, and IT operating models aligned with enterprise vision.', 1),
+  ('automation', 'Automation', 'Business process automation, RPA workflow assessments, operational efficiency matrices, and deterministic rule engines.', 2),
+  ('systems-integration', 'Systems Integration', 'Robust API architecture, enterprise service bus (ESB) topology, seamless ERP/CRM connectivity, and legacy middleware unification.', 3),
+  ('migration', 'Migration', 'Holistic cloud adoption strategy, bare-metal to cloud migrations, zero-downtime database replatforming, and microservices modernization.', 4),
+  ('systems-software-development', 'Systems & Software Development', 'Bespoke web and mobile enterprise platforms, mission-critical business engines, test automation suites, and software quality engineering.', 5),
+  ('technical-solutions-support', 'Technical Solutions & Support', 'Enterprise operational SLAs, mission-critical application maintenance, Level-3 incident triage, proactive telemetry, and health monitoring.', 6);
 
 insert into auth.users (
   id, instance_id, aud, role, email, email_confirmed_at, created_at, updated_at,
