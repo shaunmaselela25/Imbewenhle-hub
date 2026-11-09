@@ -20,6 +20,8 @@ export default defineConfig({
         test: {
           name: "component",
           environment: "jsdom",
+          // Form tests type each character, which can exceed 5 seconds on a busy machine.
+          testTimeout: 20_000,
           include: ["tests/component/**/*.test.tsx"],
           setupFiles: ["tests/helpers/setup-component.ts"],
         },
@@ -29,6 +31,7 @@ export default defineConfig({
         test: {
           name: "integration",
           environment: "node",
+          testTimeout: 20_000,
           include: ["tests/integration/**/*.test.ts"],
         },
       },

@@ -2,6 +2,11 @@ export const messages = {
   "site.name": "Imbewenhle Digital Solutions Hub",
   "nav.services": "Services",
   "nav.signIn": "Sign in",
+  "nav.signOut": "Sign out",
+  "nav.myEnquiries": "My enquiries",
+  "nav.queue": "Queue",
+  "nav.servicesAdmin": "Services admin",
+  "nav.users": "Users",
   "skip.link": "Skip to content",
   "page.loading": "Loading…",
 
@@ -79,14 +84,17 @@ export const messages = {
 
   "category.unavailable": "This service is no longer available. Choose another service.",
 
+  "signin.emailLabel": "Email address",
   "signin.intro": "Enter your email address and we'll send you a sign-in link.",
   "signin.button": "Send sign-in link",
   "signin.sent": "Check your email for a sign-in link. It expires in 1 hour.",
   "signin.expired": "This sign-in link has expired or was already used. Request a new one.",
 
+  "dashboard.heading": "My enquiries",
   "dashboard.empty": "You have no enquiries yet.",
   "dashboard.emptyAction": "Start an enquiry",
 
+  "detail.submitted": "Submitted",
   "detail.noUpdates": "No updates yet.",
   "detail.noProposal": "No proposal has been shared yet.",
   "detail.noMilestones": "No milestones yet.",

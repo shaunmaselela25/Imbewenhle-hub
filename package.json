@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test:unit": "vitest run --project unit --project component",
     "test:db": "supabase test db",
-    "test:int": "vitest run --project integration",
+    "test:int": "vitest run --project integration --no-file-parallelism",
     "test:e2e": "playwright test",
     "db:start": "supabase start",
     "db:reset": "supabase db reset",

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SkipLink } from "@/components/SkipLink";
+import { SessionHeader } from "@/features/auth/SessionHeader";
 import { messages } from "@/lib/copy/messages";
 import "./globals.css";
 
@@ -20,7 +21,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <SkipLink />
-        <SiteHeader />
+        <Suspense fallback={<SiteHeader />}>
+          <SessionHeader />
+        </Suspense>
         <main id="main" className="flex-1">
           {children}
         </main>

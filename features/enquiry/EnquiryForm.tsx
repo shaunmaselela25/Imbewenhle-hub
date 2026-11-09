@@ -24,6 +24,7 @@ type EnquiryFormProps = {
   selectedSlug: string;
   idempotencyKey: string;
   submit: (input: EnquiryInput) => Promise<SubmitResult>;
+  profile?: { name: string | null; organisation: string | null; email: string };
 };
 
 const urgencyOptions = urgencyValues.map((value) => ({
@@ -36,7 +37,13 @@ const budgetOptions = budgetValues.map((value) => ({
   label: messages[`budget.label.${value}`],
 }));
 
-export function EnquiryForm({ categories, selectedSlug, idempotencyKey, submit }: EnquiryFormProps) {
+export function EnquiryForm({
+  categories,
+  selectedSlug,
+  idempotencyKey,
+  submit,
+  profile,
+}: EnquiryFormProps) {
   const router = useRouter();
   // Refreshing the route must not issue a new key: retries have to stay idempotent (BR9).
   const [formKey] = useState(idempotencyKey);
@@ -110,6 +117,7 @@ export function EnquiryForm({ categories, selectedSlug, idempotencyKey, submit }
         label={messages["enquiry.label.name"]}
         name="name"
         autoComplete="name"
+        defaultValue={profile?.name ?? undefined}
         required
         error={errorFor("name")}
       />
@@ -117,6 +125,7 @@ export function EnquiryForm({ categories, selectedSlug, idempotencyKey, submit }
         label={messages["enquiry.label.organisation"]}
         name="organisation"
         autoComplete="organization"
+        defaultValue={profile?.organisation ?? undefined}
         required
         error={errorFor("organisation")}
       />
@@ -125,6 +134,8 @@ export function EnquiryForm({ categories, selectedSlug, idempotencyKey, submit }
         name="email"
         type="email"
         autoComplete="email"
+        defaultValue={profile?.email}
+        readOnly={Boolean(profile)}
         required
         error={errorFor("email")}
       />
