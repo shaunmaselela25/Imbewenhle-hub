@@ -240,6 +240,7 @@ imbewenhle-hub/
     (public)/page.tsx                         S1 Landing
     (public)/enquire/[category]/page.tsx      S2 Service enquiry
     (public)/enquire/submitted/page.tsx       S3 Confirmation
+    (public)/enquire/submitted/clear/route.ts Clears the confirmation cookie after S3 shows
     (public)/sign-in/page.tsx                 S4 Sign in
     (public)/privacy/page.tsx                 S11 Privacy notice
     auth/callback/route.ts                    Magic-link callback
@@ -1053,23 +1054,23 @@ The same ID may be used at two levels when both prove the same criterion, e.g. T
 | T-S11-1 | Component | tests/component/S11.test.tsx | Given `content/privacy.md`, when S11 renders, then the content shows with headings |
 | T-E2E-1 | E2E | tests/e2e/enquiry.spec.ts | Given a visitor, when they open S1, pick a service, fill valid fields and submit, then S3 shows an `IMB-` reference |
 
-- [ ] All tests above are written, run, and fail for the expected reason.
+- [x] All tests above are written, run, and fail for the expected reason.
 
 **Step 2: Backend (Green)**
 
-- [ ] `lib/validation/enquiry.ts`: Zod schema mirroring Section 8.1 limits, returning message keys.
-- [ ] `features/enquiry/submit.ts` server action: Zod validate → RPC `submit_enquiry` → map errors to message keys → on success set httpOnly, SameSite=Lax, 10-minute cookie `confirmation` (`reference`, `email`) and `redirect('/enquire/submitted')` (replace).
+- [x] `lib/validation/enquiry.ts`: Zod schema mirroring Section 8.1 limits, returning message keys.
+- [x] `features/enquiry/submit.ts` server action: Zod validate → RPC `submit_enquiry` → map errors to message keys → on success set httpOnly, SameSite=Lax, 10-minute cookie `confirmation` (`reference`, `email`) and `redirect('/enquire/submitted')` (replace).
 
 **Step 3: Frontend (Green)**
 
-- [ ] S2 built to design: category shown, labelled fields in PRD order (name, organisation, email, category, problem description, desired outcome, urgency, budget range), required markers, counters, privacy explanation + link, idempotency key generated once per form load; states per 7.3.
+- [x] S2 built to design: category shown, labelled fields in PRD order (name, organisation, email, category, problem description, desired outcome, urgency, budget range), required markers, counters, privacy explanation + link, idempotency key generated once per form load; states per 7.3.
 - [ ] S3 built to design; reads and clears the cookie.
-- [ ] S11 renders `content/privacy.md`.
+- [x] S11 renders `content/privacy.md`.
 
 **Step 4: Refactor and full check**
 
-- [ ] Code cleaned up; no duplicated logic; names use PRD key terms.
-- [ ] Full check passes (lint, type check, every automated test from every phase so far).
+- [x] Code cleaned up; no duplicated logic; names use PRD key terms.
+- [x] Full check passes (lint, type check, every automated test from every phase so far).
 
 **Step 5: Manual checks (human)**
 
@@ -1079,11 +1080,11 @@ The same ID may be used at two levels when both prove the same criterion, e.g. T
 
 **Definition of Done**
 
-- [ ] Every test in Step 1 passes.
-- [ ] All earlier tests still pass.
-- [ ] Every screen in this phase shows all its required states.
+- [x] Every test in Step 1 passes.
+- [x] All earlier tests still pass.
+- [x] Every screen in this phase shows all its required states.
 - [ ] Manual checks are ticked by the human.
-- [ ] Progress log updated (Section 17).
+- [x] Progress log updated (Section 17).
 
 **Commit message:** `Phase 4: Enquiry submission and confirmation`
 
@@ -1601,6 +1602,7 @@ Edge cases and quality:
 | 1 | 09 Nov 2026 | Automated checks pass; human manual checks and S1 design comparison pending | 36 / 36 (33 unit and component, 1 database, 1 integration, 1 E2E) | `Phase 1: Foundation` | https://github.com/shaunmaselela25/Imbewenhle-hub. Lint, type check and `npm run scan:secrets` clean. Node 26.13.0, npm 11.20.0, Next.js 16.4.5, React 19.3.0, TypeScript 5.9.3, Tailwind 4.3.5, Zod 4.6.7, @supabase/supabase-js 2.119.0, @supabase/ssr 0.12.7, Supabase CLI 3.0.0, Vitest 5.1.0, RTL 16.3.3, @testing-library/dom 10.4.2, jest-dom 7.0.1, user-event 14.6.8, jsdom 31.0.0, coverage-v8 5.1.0, Playwright 1.65.0, axe 4.14.0, @lhci/cli 0.16.0, gitleaks 8.30.1. `@types/node` raised from the scaffold's ^20 to ^26 (Vitest requires ≥22). S1 has no design yet (#30), and rows 30–39 of Section 18 hold unreviewed assumptions |
 | 2 | 09 Nov 2026 | Automated checks pass; human manual checks pending | 217 / 217 (33 unit and component, 182 database, 1 integration, 1 E2E) | `Phase 2: Data and security` | Lint, type check and `npm run scan:secrets` clean. Every SEC1–SEC19 row has an allow and a deny test. Seed service descriptions are placeholders until Section 18 #24 is supplied. Additions the plan left open: error codes `milestone_locked` and `not_found`; helpers `changed_fields`, `audit_row_change` (shared by `audit_proposal`, `audit_milestone`, `audit_category`) and `category_title` (keeps an inactive category's title on a client's enquiry) |
 | 3 | 09 Nov 2026 | Automated checks pass; human manual checks pending; parts of S1 await #42 | 226 / 226 (39 unit and component, 182 database, 3 integration, 2 E2E) | `Phase 3: Service catalogue` | Lint, type check, production build and `npm run scan:secrets` clean. S1 built to its Stitch design except the items in Section 18 #42; T-S1-1 reordered to the real design order (enquiry action in the hero) and extended. `lib/supabase/server.ts` was created here rather than in Phase 5 because OP1 needs it. Added a `CatalogueServices` mock to T-S1-1 so that it needs no network; its assertions are unchanged |
+| 4 | 09 Nov 2026 | Automated checks pass; human manual checks pending; no S3 design supplied | 285 / 285 (85 unit and component, 182 database, 11 integration, 7 E2E) | `Phase 4: Enquiry submission and confirmation` | Lint, type check, production build and `npm run scan:secrets` clean; `lib/validation/enquiry.ts` 100% line coverage. `content/privacy.md` is a marked placeholder. The action sets the confirmation cookie and the form navigates with `router.replace` (T-US1-1 needs a visible navigation). S3 clears its cookie through a POST route, because an action that changes a cookie re-renders the route. Markdown is rendered by `components/MarkdownContent.tsx`, so no new library. Playwright `expect` timeout raised to 20 s for first-visit compiles in dev |
 
 ---
 
@@ -1649,9 +1651,10 @@ All rows are answered with a recommended decision. The human confirms each one a
 | 37 | Phase 1 needs libraries not listed in 4.1 (Rule 13). `@testing-library/react` 16 requires `@testing-library/dom` as a peer dependency; `@testing-library/jest-dom` provides the matchers for visibility, `aria-*` and accessible-description checks in T-C-1 … T-C-16 | 4.1, Rule 13, Phase 1 | Recommended: add both to 4.1 as dev dependencies | Confirmed by human, 09 Nov 2026 |
 | 38 | No approved wording for the required-field marker (7.2, T-C-2) or the character counter (7.2, T-C-3), and Rule 9 forbids inventing wording | 7.2, 10.1, T-C-2, T-C-3 | Recommended: add `form.required` = (required) and `form.counter` = {count} of {max} characters, unless the S2 design shows different text | Confirmed by human, 09 Nov 2026 |
 | 39 | Section 5, 9 (SEC20) and Phase 5 name `middleware.ts`, but Next.js 16 (latest stable: 16.4.5) deprecates the `middleware` file convention in favour of `proxy` | 4.1, 5, SEC20, Phase 5 | Recommended: use `proxy.ts` with the same role, and update Section 5, SEC20 and Phase 5 to match | Confirmed by human, 09 Nov 2026 |
-| 40 | The supplied Stitch screens (S1, S2, S6, S7) go beyond or conflict with the PRD and plan. All: bottom tab bar (Catalogue, Enquiry, Tracker, Workspace) vs no tabs in 7.3 and Section 11. S2: 3-step flow; several services selectable; telephone and implementation-target fields; Save Draft; inline "Confirmation Dialog (POP-01)" (#14); problem minimum 50 vs 30; different budget bands; "Domain Verified" badge vs BR3. S6: lead architect shown, file attachment (Deferred), "Request Status Clarification" at any status vs #21, account desk with a 2-hour SLA. S7: assignment to a consultant (Deferred, #11), bulk select, Archived tab, SLA and priority sort, attachments, notifications, sprint progress. Reference `IMB-2025-0842` vs BR1 random format | 3.3, 7.3, 8.1, 10.1, 11, S2, S3, S6, S7, BR1, BR2, BR12 | Waiting on human before Phase 4: PRD and plan win, or change them to match the designs. Recommended: PRD and plan win; screens follow the designs' look and wording wherever they do not conflict | Open |
+| 40 | The supplied Stitch screens (S1, S2, S6, S7) go beyond or conflict with the PRD and plan. All: bottom tab bar (Catalogue, Enquiry, Tracker, Workspace) vs no tabs in 7.3 and Section 11. S2: 3-step flow; several services selectable; telephone and implementation-target fields; Save Draft; inline "Confirmation Dialog (POP-01)" (#14); problem minimum 50 vs 30; different budget bands; "Domain Verified" badge vs BR3. S6: lead architect shown, file attachment (Deferred), "Request Status Clarification" at any status vs #21, account desk with a 2-hour SLA. S7: assignment to a consultant (Deferred, #11), bulk select, Archived tab, SLA and priority sort, attachments, notifications, sprint progress. Reference `IMB-2025-0842` vs BR1 random format | 3.3, 7.3, 8.1, 10.1, 11, S2, S3, S6, S7, BR1, BR2, BR12 | Waiting on human before Phase 4: PRD and plan win, or change them to match the designs. Recommended: PRD and plan win; screens follow the designs' look and wording wherever they do not conflict | Answered by human, 09 Nov 2026: PRD and plan win; screens follow the designs' look and wording wherever they do not conflict |
 | 41 | No approved wording for the Enquire action key or the S1 empty state (T-US1-1, T-S1-2, 10.1) | 10.1, S1 | `catalogue.enquire` = Enquire (from T-US1-1); `catalogue.empty` = No services are available right now. | Confirmed by human, 09 Nov 2026 |
 | 42 | Parts of the S1 design were not built: bottom tab bar (#40); stats "6 Core Disciplines, 100% Governance SLA, Tier 1 Consulting Model" and "ISO 27001 Aligned", which are public claims needing evidence; "MVP 1.0 Enterprise Hub" and "Consulting Advisory Active" badges; two photos (no image files supplied); service icons; tags on each service (no database column); "6 Streams" count; "Turnaround: 48-72 business hours", which conflicts with 2 business days (#4) | S1, 7.3, 8.1 | Waiting on human: which of these to add, and the image files. Recommended: leave out the claims and the turnaround line unless Imbewenhle can stand behind them | Open |
+| 43 | No approved wording for S2 field labels, heading, select placeholder or "Optional" (10.1). The design's "Zero-Commitment Boundary" promises confidentiality under a mutual NDA, a legal commitment | 10.1, S2 | Labels for name, organisation and email come from the S2 design; the rest use PRD terms: Service, Problem description, Desired outcome, Urgency, Budget range. `enquiry.heading` = Enquiry; `form.choose` = Choose…; `form.optional` = Optional. The NDA text is left out | Assumed: human to confirm the labels, and whether the NDA promise should appear |
 
 ---
 

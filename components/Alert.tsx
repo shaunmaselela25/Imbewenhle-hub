@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ComponentProps } from "react";
 
 type AlertType = "error" | "success" | "warning" | "info";
 
@@ -9,9 +9,12 @@ const typeClasses: Record<AlertType, string> = {
   info: "border-border text-text",
 };
 
-export function Alert({ type, children }: { type: AlertType; children: ReactNode }) {
+type AlertProps = ComponentProps<"div"> & { type: AlertType };
+
+export function Alert({ type, children, ...props }: AlertProps) {
   return (
     <div
+      {...props}
       role={type === "error" ? "alert" : "status"}
       className={`rounded-md border bg-background p-4 text-sm ${typeClasses[type]}`}
     >
