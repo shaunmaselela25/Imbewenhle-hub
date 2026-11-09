@@ -189,7 +189,7 @@ A responsive web application where businesses describe technology needs, submit 
 | Backend and database | Supabase: PostgreSQL, Auth (email magic link), Row Level Security; `@supabase/supabase-js`, `@supabase/ssr` | latest stable at setup | Data, sign in, permissions |
 | Server functions | Next.js server actions and route handlers + PostgreSQL functions (RPC). No Supabase Edge Functions | latest stable at setup | Submission, status changes, admin actions |
 | Data fetching and caching | None (server components read via Supabase server client) | — | — |
-| Unit and component tests | Vitest + React Testing Library + `@testing-library/user-event` + jsdom + `@vitest/coverage-v8` | latest stable at setup | Rules, components, screen states |
+| Unit and component tests | Vitest + React Testing Library + `@testing-library/dom` + `@testing-library/jest-dom` + `@testing-library/user-event` + jsdom + `@vitest/coverage-v8` | latest stable at setup | Rules, components, screen states |
 | Database and permission tests | pgTAP via Supabase CLI (`supabase test db`) | latest stable at setup | Constraints, triggers, RLS allow/deny |
 | Integration tests | Vitest + supabase-js against the local Supabase stack | latest stable at setup | Backend operations end to end |
 | End-to-end tests | Playwright + `@axe-core/playwright` | latest stable at setup | User flows, accessibility scans |
@@ -200,12 +200,12 @@ A responsive web application where businesses describe technology needs, submit 
 
 ### 4.2 Prerequisites on the computer
 
-- [ ] Node.js (current LTS)
-- [ ] Git, with a GitHub account and an empty repository (Section 18 #29)
-- [ ] Docker Desktop, running, for the local Supabase stack
-- [ ] Supabase CLI (installed as a dev dependency, run with `npx supabase`)
-- [ ] gitleaks
-- [ ] Playwright browsers (`npx playwright install chromium`)
+- [x] Node.js (current LTS)
+- [x] Git, with a GitHub account and an empty repository (Section 18 #29)
+- [x] Docker Desktop, running, for the local Supabase stack
+- [x] Supabase CLI (installed as a dev dependency, run with `npx supabase`)
+- [x] gitleaks
+- [x] Playwright browsers (`npx playwright install chromium`)
 - [ ] Accounts: Supabase (cloud project for the demo), Vercel (linked to the GitHub repository)
 
 ### 4.3 Commands
@@ -321,17 +321,17 @@ Rules:
 
 ### 7.1 Design tokens
 
-All values live in `theme/tokens.ts` and are exposed to Tailwind via `tailwind.config.ts`. Screens use tokens only. **Provisional:** these values are placeholders until Phase 1 task P1-3 replaces them with values read from the Stitch export (Section 18 #22).
+All values live in `theme/tokens.ts` and are exposed to Tailwind via `tailwind.config.ts`. Screens use tokens only. **P1-3 status:** colours marked "Stitch screen" were measured from the one Stitch screen supplied so far (Section 18 #40). All others are still provisional until the human confirms them.
 
 | Token | Value | From PRD |
 | --- | --- | --- |
-| `color.primary` | #1F6F43 | Stitch export (provisional) |
-| `color.primaryHover` | #185A36 | Stitch export (provisional) |
-| `color.background` | #FFFFFF | Stitch export (provisional) |
-| `color.surface` | #F5F7F6 | Stitch export (provisional) |
-| `color.text` | #1A1F1C | Stitch export (provisional) |
+| `color.primary` | #FE932C | Stitch screen |
+| `color.primaryHover` | #904D00 | Stitch screen |
+| `color.background` | #FFFFFF | Stitch screen |
+| `color.surface` | #F2F4F6 | Stitch screen |
+| `color.text` | #131B2E | Stitch screen |
 | `color.textMuted` | #4B5550 | Stitch export (provisional); ≥4.5:1 on background |
-| `color.border` | #D4DAD7 | Stitch export (provisional) |
+| `color.border` | #E6E8EA | Stitch screen |
 | `color.focus` | #1A56DB | §10 visible focus; ≥3:1 against adjacent colours |
 | `color.error` / `color.success` / `color.warning` | #B42318 / #067647 / #B54708 | Stitch export (provisional) |
 | `font.family` | Inter, system-ui, sans-serif | Stitch export (provisional) |
@@ -843,26 +843,26 @@ The same ID may be used at two levels when both prove the same criterion, e.g. T
 | T-C-16 | Component | tests/component/SkipLink.test.tsx | Given keyboard focus, when Tab is pressed first, then "Skip to content" is visible and targets `#main` |
 | T-S1-1 | Component | tests/component/S1.test.tsx | Given the static landing, when rendered, then value proposition, services heading, process overview and enquiry action show in design order |
 
-- [ ] All tests above are written, run, and fail for the expected reason.
+- [x] All tests above are written, run, and fail for the expected reason.
 
 **Step 2: Backend (Green)**
 
-- [ ] P1-1: `npx create-next-app` (TypeScript, App Router, ESLint, Tailwind), then install the Section 4.1 tools only; add all `package.json` scripts from Section 4.3.
-- [ ] P1-2: `npx supabase init`; `supabase/migrations/20261104000100_extensions.sql`; `.env.example`; `.gitignore` includes `.env*` except `.env.example`.
-- [ ] Vitest projects `unit`, `component`, `integration`; `playwright.config.ts` with `webServer: npm run dev`.
+- [x] P1-1: `npx create-next-app` (TypeScript, App Router, ESLint, Tailwind), then install the Section 4.1 tools only; add all `package.json` scripts from Section 4.3.
+- [x] P1-2: `npx supabase init`; `supabase/migrations/20261104000100_extensions.sql`; `.env.example`; `.gitignore` includes `.env*` except `.env.example`.
+- [x] Vitest projects `unit`, `component`, `integration`; `playwright.config.ts` with `webServer: npm run dev`.
 
 **Step 3: Frontend (Green)**
 
 - [ ] P1-3: read colours, font, sizes, spacing and radius from the exported Stitch screens in `docs/designs/`; replace provisional values in `theme/tokens.ts` and Section 7.1; human confirms.
-- [ ] `tailwind.config.ts` reads only `theme/tokens.ts`.
-- [ ] `lib/copy/messages.ts` with every key in Section 10.1.
-- [ ] Components: Button, TextField, TextArea, Select, Alert, PageState, SiteHeader (logged-out variant), SkipLink.
+- [x] `tailwind.config.ts` reads only `theme/tokens.ts`.
+- [x] `lib/copy/messages.ts` with every key in Section 10.1.
+- [x] Components: Button, TextField, TextArea, Select, Alert, PageState, SiteHeader (logged-out variant), SkipLink.
 - [ ] S1 static: layout, value proposition and process overview to design; services section shows a placeholder list until Phase 3.
 
 **Step 4: Refactor and full check**
 
-- [ ] Code cleaned up; no duplicated logic; names use PRD key terms.
-- [ ] Full check passes (lint, type check, every automated test from every phase so far).
+- [x] Code cleaned up; no duplicated logic; names use PRD key terms.
+- [x] Full check passes (lint, type check, every automated test from every phase so far).
 
 **Step 5: Manual checks (human)**
 
@@ -872,11 +872,11 @@ The same ID may be used at two levels when both prove the same criterion, e.g. T
 
 **Definition of Done**
 
-- [ ] Every test in Step 1 passes.
-- [ ] All earlier tests still pass.
-- [ ] Every screen in this phase shows all its required states.
+- [x] Every test in Step 1 passes.
+- [x] All earlier tests still pass.
+- [x] Every screen in this phase shows all its required states.
 - [ ] Manual checks are ticked by the human.
-- [ ] Progress log updated (Section 17) with exact installed versions and the repository link.
+- [x] Progress log updated (Section 17) with exact installed versions and the repository link.
 
 **Commit message:** `Phase 1: Foundation`
 
@@ -1598,7 +1598,7 @@ Edge cases and quality:
 
 | Phase | Date | Status | Automated tests (passed / total) | Commit | Notes |
 | --- | --- | --- | --- | --- | --- |
-| — | — | Not started | 0 / 0 | — | First row is added at the end of Phase 1 with exact tool versions and the repository link |
+| 1 | 09 Nov 2026 | Automated checks pass; human manual checks and S1 design comparison pending | 36 / 36 (33 unit and component, 1 database, 1 integration, 1 E2E) | `Phase 1: Foundation` | https://github.com/shaunmaselela25/Imbewenhle-hub. Lint, type check and `npm run scan:secrets` clean. Node 26.13.0, npm 11.20.0, Next.js 16.4.5, React 19.3.0, TypeScript 5.9.3, Tailwind 4.3.5, Zod 4.6.7, @supabase/supabase-js 2.119.0, @supabase/ssr 0.12.7, Supabase CLI 3.0.0, Vitest 5.1.0, RTL 16.3.3, @testing-library/dom 10.4.2, jest-dom 7.0.1, user-event 14.6.8, jsdom 31.0.0, coverage-v8 5.1.0, Playwright 1.65.0, axe 4.14.0, @lhci/cli 0.16.0, gitleaks 8.30.1. `@types/node` raised from the scaffold's ^20 to ^26 (Vitest requires ≥22). S1 has no design yet (#30), and rows 30–39 of Section 18 hold unreviewed assumptions |
 
 ---
 
@@ -1637,6 +1637,17 @@ All rows are answered with a recommended decision. The human confirms each one a
 | 27 | §12 analytics | 3.3 | Measured with SQL in `docs/metrics.sql`; no in-app dashboard (Deferred) | Answered (recommended; confirm) |
 | 28 | PRD version | 0 | PRD 28 Oct 2026 = v1.0; with these answers = v1.1 | Answered (recommended; confirm) |
 | 29 | Repository | 0, 4.2 | Human creates an empty GitHub repository named `imbewenhle-hub` before Phase 1; link recorded in Section 17 | Answered (recommended; confirm) |
+| 30 | `docs/designs/` holds only README.md. S1 is needed for Phase 1 (S1 build, P1-3 tokens). PNGs do not reliably give exact font names, sizes or spacing | 7.1, 7.3, P1-3, #22 | Waiting on human: add `docs/designs/S1-landing.png`. Recommended: also add Stitch's HTML/code export for S1, if available, so tokens are read rather than estimated | Still missing: the screen supplied on 09 Nov 2026 is the enquiry form, not S1 (see #40). Human said "just build", so S1 layout is unverified |
+| 31 | Rows 1–29 are "recommended; confirm", and Section 0 and the PRD require human confirmation before implementation | 0, 18, PRD §15 | Waiting on human: confirm rows 1–29, or list changes | Assumed: recommended answer used without review ("just build", 09 Nov 2026); human to confirm |
+| 32 | No approved wording exists for S1's value proposition, process overview, enquiry action or Phase 1 services placeholder (not in the PRD or 10.1; Rule 9 forbids inventing wording) | S1, T-S1-1, 10.1 | Recommended: copy S1 text exactly from the design into `messages.ts`; placeholder list shows the six FR-01 titles only, without descriptions | Assumed: no S1 design available, so `landing.*` text is provisional wording paraphrased from PRD §2 and §9; human to supply or approve |
+| 33 | Labels used in Phase 1 are missing from 10.1, and T-C-14 has no message keys for its loading and empty states | 10.1, T-C-14, T-C-15, T-C-16 | Recommended: add `nav.services` = Services, `nav.signIn` = Sign in, `skip.link` = Skip to content, `page.loading` = Loading…; PageState empty receives the screen's own key (e.g. `dashboard.empty`); not found uses `error.notFound` | Assumed: recommended answer used without review ("just build", 09 Nov 2026); human to confirm |
+| 34 | Phase 1 test lists disagree: 13.0 says T-C-1 … 6 and T-C-16; Step 1 omits T-C-5 (built in Phase 5) and adds T-C-14, T-C-15 and T-S1-1 | 13.0, Phase 1 Step 1 | Recommended: follow Phase 1 Step 1 | Assumed: recommended answer used without review ("just build", 09 Nov 2026); human to confirm |
+| 35 | 7.3 lists Normal, Loading, Error and Empty for S1, but Phase 1 is static and T-S1-2 tests those states in Phase 3; the Phase 1 Definition of Done requires all states | 7.3, Phase 1 DoD, T-S1-2 | Recommended: Phase 1 delivers Normal only; Loading, Error and Empty are delivered in Phase 3 | Assumed: recommended answer used without review ("just build", 09 Nov 2026); human to confirm |
+| 36 | Prerequisites in 4.2 not met: Node.js is v24.19.0 but the newest LTS line is v26 (v26.13.0, 28 Oct 2026); gitleaks is not installed | 1 step 5, 4.1, 4.2 | Recommended: human installs Node 26 LTS and gitleaks before Phase 1, or tells the agent to stay on Node 24 (still an LTS line) and accepts the difference from "current LTS" | Answered 09 Nov 2026: human chose Node 26 LTS and gitleaks via winget |
+| 37 | Phase 1 needs libraries not listed in 4.1 (Rule 13). `@testing-library/react` 16 requires `@testing-library/dom` as a peer dependency; `@testing-library/jest-dom` provides the matchers for visibility, `aria-*` and accessible-description checks in T-C-1 … T-C-16 | 4.1, Rule 13, Phase 1 | Recommended: add both to 4.1 as dev dependencies | Assumed: recommended answer used without review ("just build", 09 Nov 2026); human to confirm |
+| 38 | No approved wording for the required-field marker (7.2, T-C-2) or the character counter (7.2, T-C-3), and Rule 9 forbids inventing wording | 7.2, 10.1, T-C-2, T-C-3 | Recommended: add `form.required` = (required) and `form.counter` = {count} of {max} characters, unless the S2 design shows different text | Assumed: `form.required` = * (as in the Stitch screen); `form.counter` as recommended, because the design's "148 chars (Valid)" does not show the maximum; human to confirm |
+| 39 | Section 5, 9 (SEC20) and Phase 5 name `middleware.ts`, but Next.js 16 (latest stable: 16.4.5) deprecates the `middleware` file convention in favour of `proxy` | 4.1, 5, SEC20, Phase 5 | Recommended: use `proxy.ts` with the same role, and update Section 5, SEC20 and Phase 5 to match | Assumed: recommended answer used without review ("just build", 09 Nov 2026); human to confirm |
+| 40 | The one Stitch screen supplied (mobile enquiry form) conflicts with the PRD and plan: 3-step flow; bottom tab bar (Catalogue, Enquiry, Tracker, Workspace) vs no tabs in 7.3; inline "Confirmation Dialog (POP-01)" (#14 says ask before building modals); several services selectable vs one category; extra fields (telephone, implementation target) and Save Draft; problem minimum 50 vs 30 characters; budget bands differ from #8; reference `IMB-2025-0842` vs BR1 random format; "Domain Verified" email badge vs BR3 | 7.3, 8.1, 10.1, S2, S3, BR1, BR2, BR12 | Waiting on human before Phase 4: PRD and plan win, or change them to match the design. Recommended: PRD and plan win | Open |
 
 ---
 
