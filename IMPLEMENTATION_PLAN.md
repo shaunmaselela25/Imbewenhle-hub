@@ -220,7 +220,7 @@ Before the full check: Docker is running and `npm run db:start` has been run. Pl
 | Start the app | `npm run dev` |
 | Unit and component tests | `npm run test:unit` (`vitest run --project unit --project component`) |
 | Database and permission tests | `npm run test:db` (`supabase test db`) |
-| Integration tests | `npm run test:int` (`vitest run --project integration`) |
+| Integration tests | `npm run test:int` (`vitest run --project integration --no-file-parallelism`) |
 | End-to-end tests | `npm run test:e2e` (`playwright test`) |
 | Lint | `npm run lint` |
 | Type check | `npm run typecheck` (`tsc --noEmit`) |
@@ -253,7 +253,7 @@ imbewenhle-hub/
     layout.tsx, not-found.tsx, error.tsx      Shell, not-found and error states
   components/                                 Shared components (Section 7.2), one per file
   features/
-    catalogue/  enquiry/  status/  queue/
+    auth/  catalogue/  enquiry/  status/  queue/
     updates/  proposal/  milestones/  audit/  admin/
                                               Server actions + feature components, per feature
   lib/
@@ -263,7 +263,7 @@ imbewenhle-hub/
     supabase/                                 Browser/server clients, database.types.ts
     auth/                                     Session and role helpers, route guards
   theme/tokens.ts                             Design tokens (Section 7.1)
-  middleware.ts                               Route protection (Section 11)
+  proxy.ts                                    Route protection (Section 11)
   supabase/
     migrations/                               SQL migrations (Section 8.6)
     seed.sql                                  Seed data (Section 8.7)
@@ -599,7 +599,7 @@ Roles: `anon` (not signed in), `client`, `consultant`, `admin`. "Staff" = consul
 | SEC17 | profiles | read | Self; staff (all) | `id = auth.uid()` or `is_staff()` | policy `profiles_read` | T-SEC-17a / T-SEC-17b (client cannot read other profiles) |
 | SEC18 | profiles | update name, organisation | Self | `id = auth.uid()`; role column excluded | policy `profiles_update_self` + column privileges | T-SEC-18a / T-SEC-18b (client changing own role denied) |
 | SEC19 | profiles | update role | Admin | via `set_user_role`; `is_admin()` | function `set_user_role` | T-SEC-19a / T-SEC-19b (consultant denied) |
-| SEC20 | Staff routes `/staff/**` | open | Staff; `/staff/admin/**` admin only | session role check | `middleware.ts` + server component check | T-SEC-20a / T-SEC-20b |
+| SEC20 | Staff routes `/staff/**` | open | Staff; `/staff/admin/**` admin only | session role check | `proxy.ts` + server component check | T-SEC-20a / T-SEC-20b |
 | SEC21 | Client-facing responses | read | — | Client pages query `client_enquiry_view` and `updates` with RLS; never select internal notes; response contains no `internal` rows | RLS + view | T-SEC-21a (owner sees client updates) / T-SEC-21b (network response of S6 contains no internal note text) |
 
 **Always-on security checks** (tested in the hardening phase):
@@ -1121,25 +1121,25 @@ The same ID may be used at two levels when both prove the same criterion, e.g. T
 | T-NAV-5 | E2E | tests/e2e/navigation.spec.ts | Given a signed-in client, when they submit an enquiry, then it appears on S5 with name and email prefilled on S2 |
 | T-SEC-20a / T-SEC-20b | Integration | tests/integration/routes.test.ts | Staff route server check allows staff and rejects clients even if middleware is bypassed |
 
-- [ ] All tests above are written, run, and fail for the expected reason.
+- [x] All tests above are written, run, and fail for the expected reason.
 
 **Step 2: Backend (Green)**
 
-- [ ] `lib/supabase/server.ts`, `browser.ts` via `@supabase/ssr`; `app/auth/callback/route.ts`.
-- [ ] `middleware.ts` + `lib/auth/guards.ts` (`requireClient`, `requireStaff`, `requireAdmin`) applying Section 11.
-- [ ] `features/status/getMyEnquiries.ts`, `getMyEnquiry.ts` (OP5, OP6 status fields).
+- [x] `lib/supabase/server.ts`, `browser.ts` via `@supabase/ssr`; `app/auth/callback/route.ts`.
+- [x] `proxy.ts` + `lib/auth/guards.ts` (`requireClient`, `requireStaff`, `requireAdmin`) applying Section 11.
+- [x] `features/status/getMyEnquiries.ts`, `getMyEnquiry.ts` (OP5, OP6 status fields).
 
 **Step 3: Frontend (Green)**
 
 - [ ] S4 built to design with states per 7.3.
-- [ ] SiteHeader client, staff and admin variants.
+- [x] SiteHeader client, staff and admin variants.
 - [ ] StatusBadge, EnquiryCard; S5 and S6 (header, status, problem summary) to design with states per 7.3.
-- [ ] S2 signed-in state (prefill; email read-only).
+- [x] S2 signed-in state (prefill; email read-only).
 
 **Step 4: Refactor and full check**
 
-- [ ] Code cleaned up; no duplicated logic; names use PRD key terms.
-- [ ] Full check passes (lint, type check, every automated test from every phase so far).
+- [x] Code cleaned up; no duplicated logic; names use PRD key terms.
+- [x] Full check passes (lint, type check, every automated test from every phase so far).
 
 **Step 5: Manual checks (human)**
 
@@ -1149,11 +1149,11 @@ The same ID may be used at two levels when both prove the same criterion, e.g. T
 
 **Definition of Done**
 
-- [ ] Every test in Step 1 passes.
-- [ ] All earlier tests still pass.
-- [ ] Every screen in this phase shows all its required states.
+- [x] Every test in Step 1 passes.
+- [x] All earlier tests still pass.
+- [x] Every screen in this phase shows all its required states.
 - [ ] Manual checks are ticked by the human.
-- [ ] Progress log updated (Section 17).
+- [x] Progress log updated (Section 17).
 
 **Commit message:** `Phase 5: Sign in and client status`
 
@@ -1603,6 +1603,7 @@ Edge cases and quality:
 | 2 | 09 Nov 2026 | Automated checks pass; human manual checks pending | 217 / 217 (33 unit and component, 182 database, 1 integration, 1 E2E) | `Phase 2: Data and security` | Lint, type check and `npm run scan:secrets` clean. Every SEC1–SEC19 row has an allow and a deny test. Seed service descriptions are placeholders until Section 18 #24 is supplied. Additions the plan left open: error codes `milestone_locked` and `not_found`; helpers `changed_fields`, `audit_row_change` (shared by `audit_proposal`, `audit_milestone`, `audit_category`) and `category_title` (keeps an inactive category's title on a client's enquiry) |
 | 3 | 09 Nov 2026 | Automated checks pass; human manual checks pending; parts of S1 await #42 | 226 / 226 (39 unit and component, 182 database, 3 integration, 2 E2E) | `Phase 3: Service catalogue` | Lint, type check, production build and `npm run scan:secrets` clean. S1 built to its Stitch design except the items in Section 18 #42; T-S1-1 reordered to the real design order (enquiry action in the hero) and extended. `lib/supabase/server.ts` was created here rather than in Phase 5 because OP1 needs it. Added a `CatalogueServices` mock to T-S1-1 so that it needs no network; its assertions are unchanged |
 | 4 | 09 Nov 2026 | Automated checks pass; human manual checks pending; no S3 design supplied | 285 / 285 (85 unit and component, 182 database, 11 integration, 7 E2E) | `Phase 4: Enquiry submission and confirmation` | Lint, type check, production build and `npm run scan:secrets` clean; `lib/validation/enquiry.ts` 100% line coverage. `content/privacy.md` is a marked placeholder. The action sets the confirmation cookie and the form navigates with `router.replace` (T-US1-1 needs a visible navigation). S3 clears its cookie through a POST route, because an action that changes a cookie re-renders the route. Markdown is rendered by `components/MarkdownContent.tsx`, so no new library. Playwright `expect` timeout raised to 20 s for first-visit compiles in dev |
+| 5 | 09 Nov 2026 | Automated checks pass; human manual checks pending; no S4 or S5 design supplied | 373 / 373 (141 unit and component, 182 database, 33 integration, 17 E2E) | `Phase 5: Sign in and client status` | Lint, type check and production build clean. Sign-in tests run one at a time because Supabase keeps one active link per user. Test timeouts raised for slow runs. T-NAV-1 uses a real emailed link through the local mail viewer. Next.js logs a `Date.now()` prerender warning for `/dashboard` in dev; the build succeeds and it is not yet investigated. `supabase db reset` failed once without a visible reason and passed when rerun |
 
 ---
 
@@ -1655,6 +1656,7 @@ All rows are answered with a recommended decision. The human confirms each one a
 | 41 | No approved wording for the Enquire action key or the S1 empty state (T-US1-1, T-S1-2, 10.1) | 10.1, S1 | `catalogue.enquire` = Enquire (from T-US1-1); `catalogue.empty` = No services are available right now. | Confirmed by human, 09 Nov 2026 |
 | 42 | Parts of the S1 design were not built: bottom tab bar (#40); stats "6 Core Disciplines, 100% Governance SLA, Tier 1 Consulting Model" and "ISO 27001 Aligned", which are public claims needing evidence; "MVP 1.0 Enterprise Hub" and "Consulting Advisory Active" badges; two photos (no image files supplied); service icons; tags on each service (no database column); "6 Streams" count; "Turnaround: 48-72 business hours", which conflicts with 2 business days (#4) | S1, 7.3, 8.1 | Waiting on human: which of these to add, and the image files. Recommended: leave out the claims and the turnaround line unless Imbewenhle can stand behind them | Open |
 | 43 | No approved wording for S2 field labels, heading, select placeholder or "Optional" (10.1). The design's "Zero-Commitment Boundary" promises confidentiality under a mutual NDA, a legal commitment | 10.1, S2 | Labels for name, organisation and email come from the S2 design; the rest use PRD terms: Service, Problem description, Desired outcome, Urgency, Budget range. `enquiry.heading` = Enquiry; `form.choose` = Choose…; `form.optional` = Optional. The NDA text is left out | Assumed: human to confirm the labels, and whether the NDA promise should appear |
+| 44 | S4 and S5 designs not supplied; the human chose to build without them. Wording not in 10.1: `signin.emailLabel` = Email address, `dashboard.heading` = My enquiries, `detail.submitted` = Submitted; nav labels from Section 11 | S4, S5, 10.1 | Built in the style of the other screens | Assumed: human to supply S4 and S5 and confirm the wording |
 
 ---
 

@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { redirect } from "next/navigation";
 import { CatalogueError } from "@/features/catalogue/CatalogueError";
 import { getCategories } from "@/features/catalogue/getCategories";
+import { getProfile } from "@/lib/auth/guards";
 import { createClient } from "@/lib/supabase/server";
 import { EnquiryForm } from "./EnquiryForm";
 import { submitEnquiry } from "./submit";
@@ -21,6 +22,7 @@ export async function EnquiryFormLoader({ params }: { params: Promise<{ category
       selectedSlug={category}
       idempotencyKey={randomUUID()}
       submit={submitEnquiry}
+      profile={(await getProfile()) ?? undefined}
     />
   );
 }

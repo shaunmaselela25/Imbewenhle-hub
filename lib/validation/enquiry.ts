@@ -26,6 +26,17 @@ function text({ min, max, empty, tooShort, tooLong }: LengthRule) {
     });
 }
 
+export const emailField = z
+  .string({ error: "form.email.required" })
+  .trim()
+  .superRefine((value, context) => {
+    if (value === "") {
+      context.addIssue({ code: "custom", message: "form.email.required" });
+    } else if (characters(value) > 254 || !emailFormat.test(value)) {
+      context.addIssue({ code: "custom", message: "form.email.format" });
+    }
+  });
+
 const enquirySchema = z.object({
   name: text({
     min: 2,
@@ -41,16 +52,7 @@ const enquirySchema = z.object({
     tooShort: "form.organisation.length",
     tooLong: "form.organisation.length",
   }),
-  email: z
-    .string({ error: "form.email.required" })
-    .trim()
-    .superRefine((value, context) => {
-      if (value === "") {
-        context.addIssue({ code: "custom", message: "form.email.required" });
-      } else if (characters(value) > 254 || !emailFormat.test(value)) {
-        context.addIssue({ code: "custom", message: "form.email.format" });
-      }
-    }),
+  email: emailField,
   category: z.string({ error: "form.category.required" }).min(1, "form.category.required"),
   problem: text({
     min: 30,
